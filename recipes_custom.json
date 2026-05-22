@@ -1,0 +1,63 @@
+{
+  "鱼香肉丝": {
+    "name": "鱼香肉丝 / Yu Xiang Rou Si (Fish-Fragrant Shredded Pork)",
+    "difficulty": "medium",
+    "prep_time": 20,
+    "cook_time": 8,
+    "cuisine": "川",
+    "description": "川菜经典，鱼香味型代表菜——没有鱼，但用泡椒+葱姜蒜+糖醋调出'鱼香'。肉丝滑嫩，酸甜微辣，极为下饭。",
+    "ingredients": [
+      {"name": "猪里脊肉", "amount": "250g", "substitutes": ["鸡胸肉 Chicken breast"]},
+      {"name": "黑木耳", "amount": "50g", "substitutes": ["香菇 Shiitake mushrooms"]},
+      {"name": "胡萝卜", "amount": "半根", "substitutes": []},
+      {"name": "青椒", "amount": "1个", "substitutes": []},
+      {"name": "泡椒", "amount": "3-4个", "substitutes": ["剁椒 Chopped chili + 少许醋"]},
+      {"name": "葱姜蒜末", "amount": "各1tbsp", "substitutes": []},
+      {"name": "生抽", "amount": "1tbsp", "substitutes": ["普通酱油 1tbsp"]},
+      {"name": "醋", "amount": "2tbsp", "substitutes": ["香醋 Balsamic 2tbsp"]},
+      {"name": "糖", "amount": "1.5tbsp", "substitutes": []},
+      {"name": "料酒", "amount": "1tbsp", "substitutes": ["干雪利酒 1tbsp"]},
+      {"name": "玉米淀粉", "amount": "1tbsp（腌肉）+ 1tsp（勾芡）", "substitutes": []}
+    ],
+    "equipment": ["炒锅 Wok"],
+    "steps": [
+      {"order": 1, "action": "猪肉切丝，用料酒1tbsp+生抽1/2tbsp+淀粉1tbsp腌制10分钟", "duration": 10, "warning": "肉丝顺着纹理切，逆纹切会碎"},
+      {"order": 2, "action": "黑木耳泡发切丝，胡萝卜和青椒切丝", "duration": 5},
+      {"order": 3, "action": "调鱼香汁：生抽1/2tbsp+醋2tbsp+糖1.5tbsp+淀粉1tsp+水2tbsp混合", "duration": 1},
+      {"order": 4, "action": "中高火烧热锅，加2tbsp油，放入肉丝快速炒散至变色盛出", "duration": 2, "warning": "肉下锅别马上翻！等15秒定型再炒散"},
+      {"order": 5, "action": "锅中加少许油，放入泡椒和葱姜蒜末，小火炒出红油", "duration": 1, "warning": "小火！泡椒糊了会发苦"},
+      {"order": 6, "action": "放入胡萝卜丝和木耳丝，中火翻炒1分钟", "duration": 1},
+      {"order": 7, "action": "倒入肉丝和青椒丝，翻炒均匀", "duration": 0.5},
+      {"order": 8, "action": "沿锅边倒入鱼香汁，大火快速翻炒至收汁，出锅", "duration": 0.5, "warning": "鱼香汁倒下去立刻翻，10秒就出锅！"}
+    ],
+    "tips": ["鱼香味的灵魂是泡椒+糖+醋的比例2:3:4", "所有配菜提前切好，炒的时候很快", "最后一步大火收汁才有锅气"],
+    "common_mistakes": ["肉丝炒老了（腌肉时加一点点水更嫩）", "鱼香汁比例不对（醋不够就不像鱼香）", "配菜没切均匀影响口感"]
+  },
+  "番茄炒蛋": {
+    "name": "番茄炒蛋 / Tomato Egg Stir-fry",
+    "difficulty": "easy",
+    "prep_time": 5,
+    "cook_time": 8,
+    "cuisine": "家常",
+    "description": "全中国最简单也最受欢迎的家常菜。番茄酸甜，鸡蛋嫩滑，拌饭一绝。每个中国家庭都有自己版本的番茄炒蛋。",
+    "ingredients": [
+      {"name": "鸡蛋", "amount": "4个", "substitutes": []},
+      {"name": "番茄", "amount": "3个（中等大小）", "substitutes": ["罐头番茄 Canned tomato 2个"]},
+      {"name": "葱", "amount": "2根", "substitutes": []},
+      {"name": "盐", "amount": "1/2tsp", "substitutes": []},
+      {"name": "糖", "amount": "1tsp", "substitutes": []},
+      {"name": "番茄酱", "amount": "1tbsp（可选）", "substitutes": []}
+    ],
+    "equipment": ["炒锅 Wok", "平底锅"],
+    "steps": [
+      {"order": 1, "action": "鸡蛋打散加少许盐，番茄切块", "duration": 2},
+      {"order": 2, "action": "中火烧热锅，加2tbsp油，倒入蛋液", "duration": 1},
+      {"order": 3, "action": "蛋液底部凝固后快速炒散，八成熟盛出", "duration": 0.5, "warning": "不要炒到全熟！后面还要回锅"},
+      {"order": 4, "action": "锅中加少许油，放入番茄块，中火炒出汁", "duration": 3, "warning": "用铲子压一压番茄，让汁水出来"},
+      {"order": 5, "action": "加糖和盐调味，可加1tbsp番茄酱增色", "duration": 0.5},
+      {"order": 6, "action": "倒回鸡蛋，快速翻炒均匀，撒葱花出锅", "duration": 1}
+    ],
+    "tips": ["蛋和番茄分开炒才嫩", "加糖不是为了让菜甜，是中和番茄酸味", "想要更多汁可以加2tbsp水"],
+    "common_mistakes": ["鸡蛋炒老了（第二次回锅时间要短）", "番茄没炒出汁（火不够大）", "盐放太早（番茄出汁过多）"]
+  }
+}

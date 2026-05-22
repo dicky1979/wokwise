@@ -135,79 +135,28 @@ INGREDIENT_SUBSTITUTES = {
     }
 }
 
-# ─── AI菜谱生成（模拟/模板） ──────────────────────────────
+# ─── 菜谱加载 ──────────────────────────────────────────────
 
-TEMPLATE_RECIPES = {
-    "宫保鸡丁": {
-        "name": "宫保鸡丁 / Kung Pao Chicken",
-        "difficulty": "medium",
-        "prep_time": 20,
-        "cook_time": 10,
-        "cuisine": "川",
-        "description": "经典川菜，鸡肉滑嫩，花生香脆，麻辣鲜香。全世界最受欢迎的中国菜之一。",
-        "ingredients": [
-            {"name": "鸡腿肉", "amount": "300g", "substitutes": ["鸡胸肉 Chicken breast"]},
-            {"name": "花生米", "amount": "50g", "substitutes": ["腰果 Cashews", "杏仁 Almonds"]},
-            {"name": "干辣椒", "amount": "8-10个", "substitutes": ["辣椒碎 Red chili flakes 1tbsp"]},
-            {"name": "花椒", "amount": "1tsp", "substitutes": ["花椒油 Sichuan pepper oil 1/2tsp"]},
-            {"name": "葱", "amount": "3根", "substitutes": []},
-            {"name": "姜", "amount": "3片", "substitutes": []},
-            {"name": "蒜", "amount": "3瓣", "substitutes": []},
-            {"name": "生抽", "amount": "2tbsp", "substitutes": ["普通酱油 2tbsp"]},
-            {"name": "醋", "amount": "1tbsp", "substitutes": ["香醋 Balsamic 1tbsp"]},
-            {"name": "糖", "amount": "1tbsp", "substitutes": []},
-            {"name": "料酒", "amount": "1tbsp", "substitutes": ["干雪利酒 Dry Sherry 1tbsp"]},
-            {"name": "玉米淀粉", "amount": "1tbsp", "substitutes": ["土豆淀粉 Potato starch"]},
-            {"name": "芝麻油", "amount": "1tsp", "substitutes": []}
-        ],
-        "equipment": ["炒锅 Wok", "平底锅 Skillet（替代）"],
-        "steps": [
-            {"order": 1, "action": "鸡肉切1.5cm丁，用1tbsp生抽+料酒+淀粉腌制15分钟", "duration": 15, "warning": "腌制是关键！肉嫩不嫩就看这步"},
-            {"order": 2, "action": "调酱汁：生抽1tbsp+醋+糖+淀粉1/2tsp+水2tbsp混合", "duration": 2},
-            {"order": 3, "action": "中高火烧热锅，加2tbsp油", "duration": 1},
-            {"order": 4, "action": "放入干辣椒和花椒，爆香30秒（不要焦）", "duration": 0.5, "warning": "⚠️ 辣椒容易糊！闻到香味就进行下一步"},
-            {"order": 5, "action": "放入鸡肉，快速翻炒至表面变白（约2分钟）", "duration": 2, "warning": "⚠️ 肉下锅别马上翻！等30秒再炒散"},
-            {"order": 6, "action": "加入葱姜蒜，翻炒30秒出香味", "duration": 0.5},
-            {"order": 7, "action": "倒入酱汁，快速翻炒至收汁（约1分钟）", "duration": 1},
-            {"order": 8, "action": "加入花生米，翻炒均匀，出锅", "duration": 0.5}
-        ],
-        "tips": ["鸡肉不要炒太久，变白即可", "花生米用烤过的更香", "酱汁提前调好，炒的时候不手忙脚乱"],
-        "common_mistakes": ["辣椒炒焦了发苦", "鸡肉炒老了", "花生米不脆了（应该最后放）"]
-    },
-    "麻婆豆腐": {
-        "name": "麻婆豆腐 / Mapo Tofu",
-        "difficulty": "easy",
-        "prep_time": 10,
-        "cook_time": 15,
-        "cuisine": "川",
-        "description": "麻辣鲜香的经典川菜，嫩豆腐入口即化，配饭绝品。",
-        "ingredients": [
-            {"name": "嫩豆腐", "amount": "1盒（约400g）", "substitutes": ["中硬豆腐 Medium tofu（口感不同）"]},
-            {"name": "猪肉末", "amount": "100g", "substitutes": ["牛肉末", "素肉碎 Plant-based mince"]},
-            {"name": "豆瓣酱", "amount": "1.5tbsp", "substitutes": ["Gochujang 1.5tbsp + 少许酱油"]},
-            {"name": "花椒粉", "amount": "1/2tsp", "substitutes": ["花椒油 1/4tsp"]},
-            {"name": "豆豉", "amount": "1tsp", "substitutes": ["味噌 1/2tsp"]},
-            {"name": "葱花", "amount": "适量", "substitutes": []},
-            {"name": "蒜末", "amount": "2瓣", "substitutes": []},
-            {"name": "生抽", "amount": "1tbsp", "substitutes": []},
-            {"name": "玉米淀粉", "amount": "1tbsp + 水2tbsp", "substitutes": []}
-        ],
-        "equipment": ["炒锅 Wok", "深平底锅"],
-        "steps": [
-            {"order": 1, "action": "豆腐切2cm方块，沸水加盐焯2分钟，沥干", "duration": 3, "warning": "焯水让豆腐更嫩不易碎"},
-            {"order": 2, "action": "中火烧热锅，加1tbsp油，放入肉末炒散", "duration": 2},
-            {"order": 3, "action": "加入豆瓣酱和豆豉，小火炒出红油（约1分钟）", "duration": 1, "warning": "⚠️ 小火！豆瓣酱容易糊"},
-            {"order": 4, "action": "加蒜末炒香，倒入200ml水", "duration": 1},
-            {"order": 5, "action": "轻轻放入豆腐，加生抽，中小火煮5分钟入味", "duration": 5, "warning": "⚠️ 别用铲子乱翻！轻轻晃动锅即可"},
-            {"order": 6, "action": "淋入水淀粉勾芡，轻轻推匀", "duration": 1},
-            {"order": 7, "action": "撒花椒粉和葱花，出锅", "duration": 0.5}
-        ],
-        "tips": ["豆腐焯水加盐更入味", "全程少翻动，豆腐才完整", "现磨花椒粉比预磨的香10倍"],
-        "common_mistakes": ["豆腐碎了（翻太多次）", "豆瓣酱炒糊了（火太大）", "勾芡太厚（淀粉太多）"]
-    }
-}
+def load_all_recipes():
+    """加载内置菜谱和用户自定义菜谱"""
+    recipes = {}
+    base = os.path.dirname(os.path.abspath(__file__))
 
-# ─── 核心引擎 ──────────────────────────────────────────────
+    # 内置菜谱
+    builtin = os.path.join(base, "recipes_builtin.json")
+    if os.path.exists(builtin):
+        with open(builtin) as f:
+            recipes.update(json.load(f))
+
+    # 自定义菜谱（AI生成 + 用户上传）
+    custom = os.path.join(base, "recipes_custom.json")
+    if os.path.exists(custom):
+        with open(custom) as f:
+            recipes.update(json.load(f))
+
+    return recipes
+
+TEMPLATE_RECIPES = load_all_recipes()
 
 class WokWiseEngine:
     def __init__(self):
