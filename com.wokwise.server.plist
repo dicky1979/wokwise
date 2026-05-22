@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.wokwise.server</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/python3</string>
+        <string>/Users/dgy/workspace/wokwise/server.py</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/dgy/workspace/wokwise</string>
+
+    <key>StandardOutPath</key>
+    <string>/Users/dgy/.wokwise/server.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/dgy/.wokwise/server_err.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/Users/dgy/.local/bin</string>
+        <key>HOME</key>
+        <string>/Users/dgy</string>
+    </dict>
+</dict>
+</plist>
