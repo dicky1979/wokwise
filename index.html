@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WokWise — AI Chinese Cooking</title>
+<style>
+  :root { --bg: #1a1a2e; --card: #16213e; --accent: #e94560; --text: #eee; --muted: #889; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .header { background:var(--card); padding:20px; text-align:center; border-bottom:2px solid var(--accent); }
+  .header h1 { font-size:28px; }
+  .header p { color:var(--muted); font-size:14px; margin-top:5px; }
+  .container { max-width:900px; margin:0 auto; padding:20px; }
+  .tabs { display:flex; gap:10px; margin-bottom:20px; }
+  .tab { padding:10px 20px; background:var(--card); border:none; color:var(--text); cursor:pointer; border-radius:8px; font-size:14px; }
+  .tab.active { background:var(--accent); }
+  .tab-content { display:none; }
+  .tab-content.active { display:block; }
+  .search-box { display:flex; gap:10px; margin-bottom:20px; }
+  .search-box input { flex:1; padding:12px; border:1px solid #333; border-radius:8px; background:var(--card); color:var(--text); font-size:16px; }
+  .btn { padding:12px 24px; background:var(--accent); color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:16px; }
+  .btn:hover { opacity:0.9; }
+  .card { background:var(--card); border-radius:12px; padding:20px; margin-bottom:16px; }
+  .recipe-header h2 { font-size:22px; margin-bottom:4px; }
+  .recipe-meta { color:var(--muted); font-size:13px; display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px; }
+  .ingredient-item { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #2a2a4a; font-size:14px; }
+  .ingredient-item .sub { color:var(--muted); font-size:12px; }
+  .step-item { padding:10px 0; border-bottom:1px solid #2a2a4a; }
+  .step-num { display:inline-block; width:28px; height:28px; background:var(--accent); color:#fff; border-radius:50%; text-align:center; line-height:28px; font-size:14px; margin-right:10px; }
+  .step-text { font-size:14px; line-height:1.6; }
+  .warning { color:#ff6; font-size:12px; margin-top:4px; padding:4px 8px; background:rgba(255,255,0,0.1); border-radius:4px; display:inline-block; }
+  .tip-item { padding:4px 0; font-size:13px; color:var(--muted); }
+  .form-group { margin-bottom:16px; }
+  .form-group label { display:block; margin-bottom:4px; font-size:13px; color:var(--muted); }
+  .form-group input,.form-group textarea,.form-group select { width:100%; padding:10px; border:1px solid #333; border-radius:8px; background:var(--card); color:var(--text); font-size:14px; }
+  .form-group textarea { min-height:80px; font-family:monospace; }
+  .stove-select { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+  .stove-btn { padding:8px 16px; background:var(--card); border:1px solid #333; border-radius:8px; color:var(--text); cursor:pointer; font-size:13px; }
+  .stove-btn.active { border-color:var(--accent); background:rgba(233,69,96,0.2); }
+  .loading { text-align:center; padding:40px; color:var(--muted); }
+  .recipe-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; }
+  .recipe-card { background:var(--card); border-radius:12px; padding:16px; cursor:pointer; transition:transform .2s; }
+  .recipe-card:hover { transform:translateY(-2px); opacity:0.9; }
+  .recipe-card h3 { font-size:16px; margin-bottom:4px; }
+  .recipe-card .meta { color:var(--muted); font-size:12px; }
+  .toast { position:fixed; bottom:20px; right:20px; padding:12px 24px; border-radius:8px; color:#fff; z-index:999; animation:fadeIn .3s; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .toast.success { background:#2ecc71; }
+  .toast.error { background:#e74c3c; }
+  .section-title { font-size:16px; margin:16px 0 8px; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>WokWise</h1>
+  <p>AI-Powered Chinese Cooking Platform</p>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('search')">Search</button>
+    <button class="tab" onclick="switchTab('browse')">Browse</button>
+    <button class="tab" onclick="switchTab('upload')">+ Upload</button>
+  </div>
+
+  <div id="tab-search" class="tab-content active">
+    <div class="card">
+      <div class="stove-select" id="stove-select">
+        <button class="stove-btn active" data-stove="gas">Gas</button>
+        <button class="stove-btn" data-stove="electric">Electric</button>
+        <button class="stove-btn" data-stove="induction">Induction</button>
+        <button class="stove-btn" data-stove="ceramic">Ceramic</button>
+      </div>
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="e.g. Kung Pao Chicken, Mapo Tofu, Egg Fried Rice..." onkeydown="if(event.key==='Enter')searchRecipe()">
+        <button class="btn" onclick="searchRecipe()">Search</button>
+      </div>
+    </div>
+    <div id="recipe-result"></div>
+  </div>
+
+  <div id="tab-browse" class="tab-content">
+    <div id="recipe-list" class="recipe-list"></div>
+  </div>
+
+  <div id="tab-upload" class="tab-content">
+    <div class="card">
+      <h3 style="margin-bottom:8px;">Share Your Recipe</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:16px;">Submit a Chinese dish recipe - AI will structure it for everyone.</p>
+      <div class="form-group">
+        <label>Dish Name (Chinese) *</label>
+        <input type="text" id="up-name-cn" placeholder="e.g. 回锅肉">
+      </div>
+      <div class="form-group">
+        <label>Dish Name (English)</label>
+        <input type="text" id="up-name-en" placeholder="e.g. Twice-Cooked Pork">
+      </div>
+      <div class="form-group">
+        <label>Cuisine</label>
+        <select id="up-cuisine">
+          <option value="川">Sichuan</option>
+          <option value="粤">Cantonese</option>
+          <option value="湘">Hunan</option>
+          <option value="鲁">Shandong</option>
+          <option value="家常">Home-style</option>
+          <option value="其他">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="up-desc" placeholder="Brief intro to the dish..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Ingredients (one per line: name | amount | substitutes)</label>
+        <textarea id="up-ingredients" rows="5" placeholder="e.g.:&#10;Pork belly | 300g | &#10;Leek | 2 stalks | &#10;Doubanjiang | 1tbsp | Gochujang"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Steps (one per line: action | minutes | warning)</label>
+        <textarea id="up-steps" rows="5" placeholder="e.g.:&#10;Boil pork until cooked | 15 | Start with cold water&#10;Slice pork thinly | 2 | Let it cool first"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Tips (one per line)</label>
+        <textarea id="up-tips" rows="3" placeholder="e.g.:&#10;Pork is done when chopstick pierces easily"></textarea>
+      </div>
+      <button class="btn" onclick="uploadRecipe()">Submit Recipe</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.stove-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.stove-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    fetch('/api/stove?type=' + b.dataset.stove);
+  });
+});
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelector('.tab[onclick*="' + name + '"]').classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'browse') loadRecipeList();
+}
+
+async function searchRecipe() {
+  const q = document.getElementById('search-input').value.trim();
+  if (!q) return;
+  const el = document.getElementById('recipe-result');
+  el.innerHTML = '<div class="loading">Cooking up your recipe...</div>';
+  try {
+    const r = await fetch('/api/recipe?q=' + encodeURIComponent(q));
+    const data = await r.json();
+    if (data.error) { el.innerHTML = '<div class="card"><p style="color:#e74c3c;">' + data.error + '</p></div>'; return; }
+    renderRecipe(data, el);
+  } catch(e) { el.innerHTML = '<div class="card"><p style="color:#e74c3c;">Error: ' + e.message + '</p></div>'; }
+}
+
+function renderRecipe(r, el) {
+  let html = '<div class="card">';
+  html += '<div class="recipe-header"><h2>' + r.name + '</h2>';
+  html += '<div class="recipe-meta">';
+  html += '<span>Prep: ' + r.prep_time + 'min</span><span>Cook: ' + r.cook_time + 'min</span>';
+  html += '<span>Difficulty: ' + r.difficulty + '</span><span>' + r.cuisine + '</span>';
+  html += '<span>' + (r.stove_info || '') + '</span></div></div>';
+
+  html += '<div class="section-title">Ingredients</div>';
+  r.ingredients.forEach(function(ing) {
+    var name = ing.alt_name || ing.name;
+    html += '<div class="ingredient-item"><span>' + ing.amount + ' ' + name + '</span>';
+    if (ing.substitutes && ing.substitutes.length) {
+      html += '<span class="sub">sub: ' + ing.substitutes.slice(0,2).join(', ') + '</span>';
+    }
+    html += '</div>';
+  });
+
+  html += '<div class="section-title">Steps</div>';
+  r.steps.forEach(function(s) {
+    html += '<div class="step-item"><span class="step-num">' + s.order + '</span><span class="step-text">' + s.action + '</span>';
+    if (s.warning) html += '<br><span class="warning">' + s.warning + '</span>';
+    html += '</div>';
+  });
+
+  if (r.tips && r.tips.length) {
+    html += '<div class="section-title">Tips</div>';
+    r.tips.forEach(function(t) { html += '<div class="tip-item">' + t + '</div>'; });
+  }
+  if (r.common_mistakes && r.common_mistakes.length) {
+    html += '<div class="section-title">Common Mistakes</div>';
+    r.common_mistakes.forEach(function(m) { html += '<div class="tip-item">' + m + '</div>'; });
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+async function loadRecipeList() {
+  const el = document.getElementById('recipe-list');
+  el.innerHTML = '<div class="loading">Loading...</div>';
+  try {
+    const r = await fetch('/api/recipes');
+    const data = await r.json();
+    var html = '';
+    Object.keys(data).forEach(function(key) {
+      var recipe = data[key];
+      html += '<div class="recipe-card" onclick="searchDish(\'' + key + '\')">';
+      html += '<h3>' + recipe.name + '</h3>';
+      html += '<div class="meta">' + (recipe.prep_time+recipe.cook_time) + 'min | ' + recipe.difficulty + ' | ' + recipe.cuisine + '</div>';
+      html += '</div>';
+    });
+    el.innerHTML = html || '<p style="color:var(--muted)">No recipes yet.</p>';
+  } catch(e) { el.innerHTML = '<p style="color:var(--muted)">Failed to load.</p>'; }
+}
+
+function searchDish(q) {
+  document.getElementById('search-input').value = q;
+  switchTab('search');
+  searchRecipe();
+}
+
+async function uploadRecipe() {
+  var name_cn = document.getElementById('up-name-cn').value.trim();
+  if (!name_cn) { toast('Please enter a dish name!', 'error'); return; }
+
+  var ingLines = document.getElementById('up-ingredients').value.trim().split('\n').filter(function(l) { return l.trim(); });
+  var ingredients = ingLines.map(function(l) {
+    var parts = l.split('|').map(function(s) { return s.trim(); });
+    return { name: parts[0] || '', amount: parts[1] || '', substitutes: parts[2] ? [parts[2]] : [] };
+  });
+
+  var stepLines = document.getElementById('up-steps').value.trim().split('\n').filter(function(l) { return l.trim(); });
+  var steps = stepLines.map(function(l, i) {
+    var parts = l.split('|').map(function(s) { return s.trim(); });
+    return { order: i+1, action: parts[0] || '', duration: parseInt(parts[1]) || 5, warning: parts[2] || '' };
+  });
+
+  var tips = document.getElementById('up-tips').value.trim().split('\n').filter(function(l) { return l.trim(); });
+
+  var recipe = {
+    name: name_cn + ' / ' + (document.getElementById('up-name-en').value.trim() || name_cn),
+    difficulty: 'medium', prep_time: 10, cook_time: 15,
+    cuisine: document.getElementById('up-cuisine').value,
+    description: document.getElementById('up-desc').value.trim(),
+    ingredients: ingredients, steps: steps, tips: tips, common_mistakes: []
+  };
+
+  try {
+    var r = await fetch('/api/upload', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ key: name_cn, recipe: recipe })
+    });
+    var data = await r.json();
+    if (data.success) {
+      toast('Recipe uploaded!', 'success');
+      document.getElementById('up-name-cn').value = '';
+      document.getElementById('up-name-en').value = '';
+      document.getElementById('up-desc').value = '';
+      document.getElementById('up-ingredients').value = '';
+      document.getElementById('up-steps').value = '';
+      document.getElementById('up-tips').value = '';
+    } else {
+      toast('Upload failed', 'error');
+    }
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+}
+
+function toast(msg, type) {
+  var t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function() { t.remove(); }, 3000);
+}
+</script>
+</body>
+</html>
